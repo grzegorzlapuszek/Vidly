@@ -10,54 +10,39 @@ namespace Vidly.Controllers
 {
     public class MoviesController : Controller
     {
-        // GET: Movies/Index 
-        [Route("Movies/Index")]
-        public ActionResult Index()
+        public ViewResult Index()
         {
-            var movie = new Movies() { Name = "Shrek" };
+            var movies = GetMovies();
 
-            var customer = new List<Customer>
+            return View(movies);
+        }
+
+        private IEnumerable<Movies> GetMovies()
+        {
+            return new List<Movies>
             {
-                new Customer{Name = "Customer1"},
-                new Customer{Name = "Customer2"}
+                new Movies { Id = 1, Name = "Shrek" },
+                new Movies { Id = 2, Name = "Wall-e" }
+            };
+        }
+
+        // GET: Movies/Random
+        public ActionResult Random()
+        {
+            var movie = new Movies() { Name = "Shrek!" };
+            var customers = new List<Customer>
+            {
+                new Customer { Name = "Customer 1" },
+                new Customer { Name = "Customer 2" }
             };
 
             var viewModel = new MovieViewModel
             {
                 Movie = movie,
-                Customers = customer
+                Customers = customers
             };
-
 
             return View(viewModel);
         }
-
-        public ActionResult Edit(int id)
-        {
-            return Content("id=" + id);
-        }
-
-        //movies
-        /*
-        public ActionResult Index(int? pageIndex, string sortBy)
-        {
-            if (!pageIndex.HasValue)
-            {
-                pageIndex = 1;
-            }
-            if (String.IsNullOrWhiteSpace(sortBy))
-            {
-                sortBy = "Name";
-            }
-            return Content(String.Format("pageIndex={0}&sorby={1}", pageIndex, sortBy));
-        }*/
-        
-
-        [Route("movies/released/{year}/{month:regex(\\d{2}):range(1,12)}")]
-        public ActionResult ByReleaseDate(int year, byte month)
-        {
-            return Content(year + "/" + month);
-        }
-
     }
 }

@@ -8,32 +8,32 @@ using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomersController : Controller
     {
-        // GET: Customer
-        [Route("Customer/Index")]
-        public ActionResult Index()
+        public ViewResult Index()
         {
+            var customers = GetCustomers();
 
-            var customer = new Customer { Id = 1, Name = "John" };
+            return View(customers);
+        }
 
+        public ActionResult Details(int id)
+        {
+            var customer = GetCustomers().SingleOrDefault(c => c.Id == id);
 
+            if (customer == null)
+                return HttpNotFound();
 
-            CustomerViewModel viewModel2 = new CustomerViewModel
+            return View(customer);
+        }
+
+        private IEnumerable<Customer> GetCustomers()
+        {
+            return new List<Customer>
             {
-                Customer = customer
-               
+                new Customer { Id = 1, Name = "John Smith" },
+                new Customer { Id = 2, Name = "Mary Williams" }
             };
-
-
-            return View("Index");
-
         }
-
-        public ActionResult Details()
-        {
-            return View("Details");
-        }
-
     }
-}
+} 
